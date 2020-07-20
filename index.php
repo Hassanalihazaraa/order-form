@@ -17,6 +17,8 @@ function whatIsHappening()
     var_dump($_SESSION);
 }
 
+//whatIsHappening();
+
 //your products with their price.
 $products = [
     ['name' => 'Club Ham', 'price' => 3.20],
@@ -32,6 +34,7 @@ $products = [
     ['name' => 'Sprite', 'price' => 2],
     ['name' => 'Ice-tea', 'price' => 3],
 ];
+
 
 $totalValue = 0;
 require 'form-view.php';
