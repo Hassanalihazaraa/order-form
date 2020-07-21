@@ -28,7 +28,7 @@
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
         <div class="form-row">
             <div class="form-group col-md-6">
-                <span><?php echo $errors['emailErr']; ?></span>
+                <span><?php echo $emailErr; ?></span>
                 <label for="email">E-mail:</label>
                 <input type="text" id="email" name="email"
                        value="<?php echo isset($_POST["email"]) ? $_POST["email"] : ''; ?>" class="form-control"/>

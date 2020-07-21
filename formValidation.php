@@ -10,69 +10,111 @@ $zipCodeErr = '';
 $productsErr = [];
 
 
-//validate function
+//Form validation
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //validate email address
+    $isValidEmail = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
     if (empty($_POST['email'])) {
-        $emailErr = '<div class="alert alert-danger" role="alert">Email required</div>';
+        $emailErr = '<div class="alert alert-danger alert-dismissible fade show" role="alert">Email required
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                     </div>';
         echo $emailErr;
+    } elseif (!$isValidEmail) {
+        $inValidEmail = '<div class="alert alert-danger alert-dismissible fade show" role="alert">Please provide a valid email address
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                             </div>';
+        echo $inValidEmail;
     } else {
-        $isValidEmail = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
-        if (!$isValidEmail) {
-            $inValidEmail = '<div class="alert alert-danger" role="alert">Please provide a valid email address</div>';
-            echo $inValidEmail;
-        }
         $email = testInput($isValidEmail);
         $_SESSION['email'] = $email;
     }
+
     //validate street name
+    $street = testInput($_POST['street']);
     if (empty($_POST['street'])) {
-        $streetErr = '<div class="alert alert-danger" role="alert">Street name is required</div>';
+        $streetErr = '<div class="alert alert-danger alert-dismissible fade show" role="alert">Street name required
+                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                         </button>
+                      </div>';
+
         echo $streetErr;
+    } elseif (!preg_match("/^[a-zA-Z ]*$/", $street)) {
+        $isString = '<div class="alert alert-danger alert-dismissible fade show" role="alert">Only letters and white space allowed
+                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                             </button>
+                         </div>';
+        echo $isString;
     } else {
-        $street = testInput($_POST['street']);
-        if (!preg_match("/^[a-zA-Z ]*$/", $street)) {
-            $isString = '<div class="alert alert-danger" role="alert">Only letters and white space allowed</div>';
-            echo $isString;
-        }
         $_SESSION['street'] = $street;
     }
+
     //validate street number
+    $streetNumber = testInput($_POST['streetnumber']);
     if (empty($_POST['streetnumber'])) {
-        $streetNumberErr = '<div class="alert alert-danger" role="alert">Street number is required</div>';
+        $streetNumberErr = '<div class="alert alert-danger alert-dismissible fade show" role="alert">Street number required
+                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                 </button>
+                            </div>';
+
         echo $streetNumberErr;
+    } elseif (!is_numeric($streetNumber)) {
+        $isNan = '<div class="alert alert-danger alert-dismissible fade show" role="alert">Only numbers allowed
+                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                         </button>
+                      </div>';
+        echo $isNan;
     } else {
-        $streetNumber = testInput($_POST['streetnumber']);
-        if (!is_numeric($streetNumber)) {
-            $isNan = '<div class="alert alert-danger" role="alert">Only numbers allowed</div>';
-            echo $isNan;
-        }
         $_SESSION['streetnumber'] = $streetNumber;
     }
+
     //validate city
+    $city = testInput($_POST['city']);
     if (empty($_POST['city'])) {
-        $cityErr = '<div class="alert alert-danger" role="alert">City name is required</div>';
+        $cityErr = '<div class="alert alert-danger alert-dismissible fade show" role="alert">City name required
+                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                         </button>
+                    </div>';
         echo $cityErr;
+    } elseif (!preg_match("/^[a-zA-Z ]+$/", $city)) {
+        $isValidString = '<div class="alert alert-danger alert-dismissible fade show" role="alert">Only letters allowed
+                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                 </button>
+                              </div>';
+        echo $isValidString;
     } else {
-        $city = testInput($_POST['city']);
-        if (!preg_match("/^[a-zA-Z ]+$/", $city)) {
-            $isValidString = '<div class="alert alert-danger" role="alert">Only letters allowed</div>';
-            echo $isValidString;
-        }
         $_SESSION['city'] = $city;
     }
+
     //validate zipcode
+    $zipCode = testInput($_POST['zipcode']);
     if (empty($_POST['zipcode'])) {
-        $zipCodeErr = '<div class="alert alert-danger" role="alert">Zipcode is required</div>';
+        $zipCodeErr = '<div class="alert alert-danger alert-dismissible fade show" role="alert">Zipcode required
+                          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                       </div>';
         echo $zipCodeErr;
+    } elseif (!is_numeric($zipCode)) {
+        $isNanZip = '<div class="alert alert-danger alert-dismissible fade show" role="alert">Only numbers allowed
+                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                             </button>
+                         </div>';
+        echo $isNanZip;
     } else {
-        $zipCode = testInput($_POST['zipcode']);
-        if (!is_numeric($zipCode)) {
-            $isNanZip = '<div class="alert alert-danger" role="alert">Only numbers allowed</div>';
-            echo $isNanZip;
-        }
         $_SESSION['zipcode'] = $zipCode;
     }
+
     //validate checked if it is checked
     if (isset($_POST['products']) && !empty($_POST['products'])) {
         $productsErr = "Products needs to be selected";
@@ -81,7 +123,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //$_SESSION['products'] = $products;
     }
 }
-
 
 //test input and trim unnecessary data
 function testInput($data)
