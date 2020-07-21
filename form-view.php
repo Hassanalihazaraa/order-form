@@ -28,28 +28,25 @@
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
         <div class="form-row">
             <div class="form-group col-md-6">
-                <span><?php echo $emailErr; ?></span>
+                <span><?php ?></span>
                 <label for="email">E-mail:</label>
                 <input type="text" id="email" name="email"
                        value="<?php echo isset($_POST["email"]) ? $_POST["email"] : ''; ?>" class="form-control"/>
-
             </div>
         </div>
 
         <fieldset>
             <legend>Address</legend>
-
             <div class="form-row">
                 <div class="form-group col-md-6">
+                    <span><?php ?></span>
                     <label for="street">Street:</label>
-                    <span><?php echo $streetErr; ?></span>
                     <input type="text" name="street" id="street"
                            value="<?php echo isset($_POST["street"]) ? $_POST["street"] : ''; ?>" class="form-control">
-
                 </div>
                 <div class="form-group col-md-6">
                     <label for="streetnumber">Street number:</label>
-                    <span><?php echo $streetNumberErr; ?></span>
+                    <span><?php ?></span>
                     <input type="text" id="streetnumber" name="streetnumber"
                            value="<?php echo isset($_POST["streetnumber"]) ? $_POST["streetnumber"] : ''; ?>"
                            class="form-control">
@@ -58,13 +55,13 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="city">City:</label>
-                    <span><?php echo $cityErr; ?></span>
+                    <span><?php ?></span>
                     <input type="text" id="city" name="city"
                            value="<?php echo isset($_POST["city"]) ? $_POST["city"] : ''; ?>" class="form-control">
                 </div>
                 <div class="form-group col-md-6">
                     <label for="zipcode">Zipcode</label>
-                    <span><?php echo $zipCodeErr; ?></span>
+                    <span><?php ?></span>
                     <input type="text" id="zipcode" name="zipcode"
                            value="<?php echo isset($_POST["zipcode"]) ? $_POST["zipcode"] : ''; ?>"
                            class="form-control">
@@ -78,17 +75,20 @@
             <?php foreach ($products as $i => $product): ?>
                 <label>
                     <input type="checkbox" value="1" name="products[<?php echo $i ?>]"/> <?php echo $product['name'] ?>
-                    <span><?php echo $productsErr[$i]; ?></span>
                     -
                     &euro; <?php echo number_format($product['price'], 2) ?></label><br/>
             <?php endforeach; ?>
         </fieldset>
-
-
+        <label>
+            <input type="checkbox" name="express_delivery" value="5"/>
+            Express delivery (+ 5 EUR)
+        </label>
         <button type="submit" class="btn btn-primary">Order!</button>
     </form>
 
-    <footer>You already ordered <strong>&euro; <?php echo $totalValue ?></strong> in food and drinks.</footer>
+    <footer>You already ordered <strong>&euro; <?php echo totalPrice($products, $totalValue); ?></strong> in food and
+        drinks.
+    </footer>
 </div>
 
 <style>
@@ -100,4 +100,8 @@
 </html>
 
 
-<?php require 'formValidation.php' ?>
+<?php
+require 'formValidation.php';
+require 'delivery.php'
+?>
+

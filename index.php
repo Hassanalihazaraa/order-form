@@ -17,18 +17,17 @@ function whatIsHappening()
     var_dump($_SESSION);
 }
 
-//whatIsHappening();
+whatIsHappening();
 
 //your products with their price.
-if (isset($_GET['food']) && (int)$_GET['food'] === 1) {
-    $products = [
-        ['name' => 'Club Ham', 'price' => 3.20],
-        ['name' => 'Club Cheese', 'price' => 3],
-        ['name' => 'Club Cheese & Ham', 'price' => 4],
-        ['name' => 'Club Chicken', 'price' => 4],
-        ['name' => 'Club Salmon', 'price' => 5]
-    ];
-} else {
+$products = [
+    ['name' => 'Club Ham', 'price' => 3.20],
+    ['name' => 'Club Cheese', 'price' => 3],
+    ['name' => 'Club Cheese & Ham', 'price' => 4],
+    ['name' => 'Club Chicken', 'price' => 4],
+    ['name' => 'Club Salmon', 'price' => 5]
+];
+if (isset($_GET['food']) && (int)$_GET['food'] === 0) {
     $products = [
         ['name' => 'Cola', 'price' => 2],
         ['name' => 'Fanta', 'price' => 2],
@@ -37,6 +36,21 @@ if (isset($_GET['food']) && (int)$_GET['food'] === 1) {
     ];
 }
 
-
 $totalValue = 0;
+function totalPrice($products, $totalValue)
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        foreach ($_POST['products'] as $i => $product) {
+            $totalValue += (float)$products[$i]['price'];
+            $_COOKIE['totalValue'] = $totalValue;
+        }
+        if (!empty($_POST['express_delivery'])) {
+            $totalValue += (float)$_POST['express_delivery'];
+            $_COOKIE['express_delivery'] = $totalValue;
+        }
+    }
+    return $totalValue;
+}
+
+
 require 'form-view.php';
