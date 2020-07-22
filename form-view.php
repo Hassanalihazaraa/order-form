@@ -72,11 +72,11 @@
 
         <fieldset>
             <legend>Products</legend>
-            <?php foreach ($products as $i => $product): ?>
+            <?php foreach ($foods as $i => $food): ?>
                 <label>
-                    <input type="checkbox" value="1" name="products[<?php echo $i ?>]"/> <?php echo $product['name'] ?>
+                    <input type="checkbox" value="1" name="foods[<?php echo $i ?>]"/> <?php echo $food['name'] ?>
                     -
-                    &euro; <?php echo number_format($product['price'], 2) ?></label><br/>
+                    &euro; <?php echo number_format($food['price'], 2) ?></label><br/>
             <?php endforeach; ?>
         </fieldset>
         <label>
@@ -86,7 +86,7 @@
         <button type="submit" class="btn btn-primary">Order!</button>
     </form>
 
-    <footer>You already ordered <strong>&euro; <?php echo totalPrice($products); ?></strong> in food and
+    <footer>You already ordered <strong>&euro; <?php echo number_format($_COOKIE['totalValue'], 2); ?></strong> in food and
         drinks.
     </footer>
 </div>

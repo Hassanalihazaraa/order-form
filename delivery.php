@@ -8,6 +8,7 @@ function delivery()
         try {
             $time->add(new DateInterval('PT' . 45 . 'M'));
             $stamp = $time->format('d-m-y H:i');
+            return $stamp;
         } catch (Exception $e) {
             echo 'Error : ', $e->getMessage(), "\n";
         }
@@ -15,11 +16,11 @@ function delivery()
         try {
             $time->add(new DateInterval('PT' . 120 . 'M'));
             $stamp = $time->format('d-m-y H:i');
+            return $stamp;
         } catch (Exception $e) {
             echo 'Error : ', $e->getMessage(), "\n";
         }
     }
-    echo $stamp;
 }
 
 delivery();

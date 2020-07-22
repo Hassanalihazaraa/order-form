@@ -17,46 +17,67 @@ function whatIsHappening()
     var_dump($_SESSION);
 }
 
-//whatIsHappening();
+whatIsHappening();
 
 //your products with their price.
-$products = [
+$foods = [
     ['name' => 'Club Ham', 'price' => 3.20],
     ['name' => 'Club Cheese', 'price' => 3],
     ['name' => 'Club Cheese & Ham', 'price' => 4],
     ['name' => 'Club Chicken', 'price' => 4],
     ['name' => 'Club Salmon', 'price' => 5]
 ];
+$drinks = [
+    ['name' => 'Cola', 'price' => 2],
+    ['name' => 'Fanta', 'price' => 2],
+    ['name' => 'Sprite', 'price' => 2],
+    ['name' => 'Ice-tea', 'price' => 3],
+];
 if (isset($_GET['food']) && (int)$_GET['food'] === 0) {
-    $products = [
-        ['name' => 'Cola', 'price' => 2],
-        ['name' => 'Fanta', 'price' => 2],
-        ['name' => 'Sprite', 'price' => 2],
-        ['name' => 'Ice-tea', 'price' => 3],
-    ];
+    $foods = $drinks;
+}
+$totalValue = 0;
+function totalPrice($foods, $totalValue)
+{
+    if (isset($_COOKIE['totalValue'])) {
+        $totalValue += (int)$_COOKIE['totalValue'];
+        foreach ($_POST['foods'] as $i => $food) {
+            $totalValue += (float)$foods[$i]['price'];
+        }
+        if (!empty($_POST['express_delivery'])) {
+            $totalValue += (float)$_POST['express_delivery'];
+        }
+        (int)$_COOKIE['totalValue'] = $totalValue;
+        setcookie('totalValue', (string)$totalValue, time() + 86400);
+    }
+    return $_COOKIE['totalValue'];
 }
 
+totalPrice($foods, $totalValue);
 
-function totalPrice($products)
+function orderConfirmation($totalValue)
 {
-    $totalValue = 0;
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if (!isset($_COOKIE['totalValue'])) {
-            foreach ($_POST['products'] as $i => $product) {
-                $totalValue += (float)$products[$i]['price'];
-                $totalValue = (float)$totalValue;
+        $validateEmail = validateEmails();
+        $validateStreet = validateStreet();
+        $validateStreetNumber = validateStreetNumber();
+        $validateCity = validateCity();
+        $validateZipcode = validateZipcode();
+        $validateProducts = validateProducts();
+        if ($validateEmail && $validateStreet && $validateStreetNumber && $validateCity && $validateZipcode && $validateProducts) {
 
-
-            }
-            if (!empty($_POST['express_delivery'])) {
-                $totalValue += (float)$_POST['express_delivery'];
-                $totalValue = (float)$totalValue;
-            }
-            setcookie('totalValue', (string)$totalValue, time() + 86400);
+        } else {
+            echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">Fill all required inputs and then try again
+                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                     </button>
+                  </div>';
         }
     }
-    return number_format($totalValue, 2);
 }
 
-
-require 'form-view.php';
+/*
+*/
+require
+'form-view.php';
+'formValidation.php';
