@@ -17,7 +17,7 @@ function whatIsHappening()
     var_dump($_SESSION);
 }
 
-whatIsHappening();
+//whatIsHappening();
 
 //your products with their price.
 $products = [
@@ -36,20 +36,26 @@ if (isset($_GET['food']) && (int)$_GET['food'] === 0) {
     ];
 }
 
-$totalValue = 0;
-function totalPrice($products, $totalValue)
+
+function totalPrice($products)
 {
+    $totalValue = 0;
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        foreach ($_POST['products'] as $i => $product) {
-            $totalValue += (float)$products[$i]['price'];
-            $_COOKIE['totalValue'] = $totalValue;
-        }
-        if (!empty($_POST['express_delivery'])) {
-            $totalValue += (float)$_POST['express_delivery'];
-            $_COOKIE['express_delivery'] = $totalValue;
+        if (!isset($_COOKIE['totalValue'])) {
+            foreach ($_POST['products'] as $i => $product) {
+                $totalValue += (float)$products[$i]['price'];
+                $totalValue = (float)$totalValue;
+
+
+            }
+            if (!empty($_POST['express_delivery'])) {
+                $totalValue += (float)$_POST['express_delivery'];
+                $totalValue = (float)$totalValue;
+            }
+            setcookie('totalValue', (string)$totalValue, time() + 86400);
         }
     }
-    return $totalValue;
+    return number_format($totalValue, 2);
 }
 
 
