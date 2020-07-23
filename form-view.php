@@ -10,8 +10,6 @@
     <title>Order food & drinks</title>
 </head>
 <body>
-
-
 <div class="container">
     <h1>Order food in restaurant "the Personal Ham Processors"</h1>
     <nav>
@@ -25,7 +23,7 @@
         </ul>
     </nav>
     <span><?php ?></span>
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+    <form method="post" action="?food=<?php echo $_GET['food'] ?>">
         <div class="form-row">
             <div class="form-group col-md-6">
                 <span><?php ?></span>
@@ -86,7 +84,8 @@
         <button type="submit" class="btn btn-primary">Order!</button>
     </form>
 
-    <footer>You already ordered <strong>&euro; <?php echo number_format($_COOKIE['totalValue'], 2); ?></strong> in food and
+    <footer>You already ordered <strong>&euro; <?php echo number_format($_COOKIE['totalValue'], 2); ?></strong> in food
+        and
         drinks.
     </footer>
 </div>
@@ -99,9 +98,9 @@
 </body>
 </html>
 
-
 <?php
 require 'formValidation.php';
-require 'delivery.php'
 ?>
+
+
 

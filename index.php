@@ -17,7 +17,7 @@ function whatIsHappening()
     var_dump($_SESSION);
 }
 
-whatIsHappening();
+//whatIsHappening();
 
 //your products with their price.
 $foods = [
@@ -39,6 +39,9 @@ if (isset($_GET['food']) && (int)$_GET['food'] === 0) {
 $totalValue = 0;
 function totalPrice($foods, $totalValue)
 {
+    if (!isset($_COOKIE['totalValue'])) {
+        setcookie('totalValue', (string)$totalValue, time() + 86400);
+    }
     if (isset($_COOKIE['totalValue'])) {
         $totalValue += (int)$_COOKIE['totalValue'];
         foreach ($_POST['foods'] as $i => $food) {
@@ -50,22 +53,23 @@ function totalPrice($foods, $totalValue)
         (int)$_COOKIE['totalValue'] = $totalValue;
         setcookie('totalValue', (string)$totalValue, time() + 86400);
     }
+
     return $_COOKIE['totalValue'];
 }
 
 totalPrice($foods, $totalValue);
 
-function orderConfirmation($totalValue)
+
+function orderConfirmation()
 {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $validateEmail = validateEmails();
-        $validateStreet = validateStreet();
-        $validateStreetNumber = validateStreetNumber();
-        $validateCity = validateCity();
-        $validateZipcode = validateZipcode();
-        $validateProducts = validateProducts();
-        if ($validateEmail && $validateStreet && $validateStreetNumber && $validateCity && $validateZipcode && $validateProducts) {
-
+        if (!empty($_POST['email']) && !empty($_POST['street']) && !empty($_POST['streetnumber']) && !empty($_POST['city']) && !empty($_POST['zipcode']) && !empty($_POST['foods'])) {
+            echo '<div class="alert alert-success alert-dismissible fade show" role="alert">Thank you for your order
+                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                     </button>
+                  </div>';
+            sendMail();
         } else {
             echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">Fill all required inputs and then try again
                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -76,8 +80,9 @@ function orderConfirmation($totalValue)
     }
 }
 
-/*
-*/
-require
-'form-view.php';
-'formValidation.php';
+orderConfirmation();
+
+
+require 'form-view.php';
+require 'formValidation.php';
+require 'mail.php';

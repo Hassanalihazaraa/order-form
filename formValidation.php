@@ -124,7 +124,7 @@ function validateZipcode()
 //validate checked if it is checked
 function validateProducts()
 {
-    if (!empty($_POST['foods'])) {
+        if (!empty($_POST['foods'])) {
         $products = testInput($_POST['foods']);
         foreach ($products as $product) {
             $_SESSION['foods'] = $product;
@@ -139,6 +139,12 @@ function validateProducts()
     }
 }
 
+validateEmails();
+validateStreet();
+validateStreetNumber();
+validateCity();
+validateZipcode();
+validateProducts();
 
 //test input and trim unnecessary data
 function testInput($data)
